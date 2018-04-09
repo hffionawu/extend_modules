@@ -1,0 +1,164 @@
+$gutter: 16px;
+$cols: 12;
+$fw: 100%;
+$xs: 320px;
+$sm: 640px;
+$md: 800px;
+$lg: 1024px;
+$xl: 1280px;
+$xxl: 1920px;
+$block: block;
+$flex: flex;
+$table: table;
+$rows: (
+ $block,
+ $flex
+);
+$media: (
+ $xl - 0 min 5,
+ $xl - 1 max 4,
+ $lg - 1 max 3,
+ $md - 1 max 2,
+ $sm - 1 max 1
+);
+@mixin simple-reset {
+  /*simple reset*/
+  *, html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed, 
+  figure, figcaption, footer, header, hgroup, 
+  menu, nav, output, ruby, section, summary,
+  time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+    border: 0;
+    outline: 0;
+  }
+  article, aside, details, figcaption, figure, 
+  footer, header, hgroup, menu, nav, section {
+    display: block;
+  }
+  :root {
+    font-size: 16px;
+  }
+  html, body {
+    width: 100%;
+    height: 100%;
+  }
+  body {
+    font-size: 100%;
+    font-size: 1rem;
+    line-height: 1.15;
+    overflow-x: hidden;
+    overflow-x: auto;
+    box-sizing: border-box;
+    font-family: "Ping Fang", "Microsoft Jheng Hei", sans-serif;
+    & *, & *::before, & *::after {
+      box-sizing: border-box;
+    }
+  }
+}//simple reset
+
+
+@mixin text-align {
+  /*text-align*/ 
+  $aligns: (
+    left,
+    center,
+    right
+  );
+  @each $align in $aligns {
+    .text-#{$align} {
+      text-align: #{$align};
+    }
+  }
+}
+@mixin spacing {
+  /*spacing $i * 0.5rem */
+  $dirs: (
+    t: top,
+    b: bottom,
+    l: left,
+    r: right,
+    x: null,
+    y: null
+  );
+  @each $class, $prop in (m: margin, p: padding) {
+    @each $dir-class, $dir-prop in $dirs {
+       @for $i from 1 through 5 {
+         .#{$class}#{$dir-class}-#{$i} {
+          @if($dir-class == "x") {    
+             #{$prop}-left: #{$i * 0.5rem};
+             #{$prop}-right: #{$i * 0.5rem};
+        
+           } @else  if($dir-class == "y") {
+              #{$prop}-top: #{$i * 0.5rem};
+             #{$prop}-bottom: #{$i * 0.5rem};
+           }//else
+           @else {
+             #{$prop}-#{$dir-prop}: #{$i * 0.5rem}; 
+           }
+         }//
+       }//for 
+    }
+  }//each
+}//spacing
+
+@mixin container() {
+  $_sizes: (
+    $xxl,
+    $xl
+  );
+  .cf {
+    *zoom: 1;
+    &::before, &::after {
+      display: $table;
+      content: " ";
+    }
+    &::after {
+      clear: both;
+    }
+  }
+  /*container-setting*/
+  [class|="container"] {
+    display: $block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    @extend .cf;
+  }
+  @each $size in $_sizes {
+    .container-#{$size} {
+      max-width: #{$size};
+    }
+  }
+}
+
+
+@mixin rows {
+  /*rows sets*/
+  [class|="row"] {
+    width: calc(100% + #{$gutter});
+    margin-left: -#{$gutter / 2};
+    margin-right: -#{$gutter / 2};
+  }
+  @each $row in $rows {
+    .row-#{$row} {
+      display: #{$row};
+      @if($row == "block") {
+        float: left;
+      }
+      @else {
+        flex-flow: row wrap;
+      }
+    }//row
+  }
+}

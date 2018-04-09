@@ -1,0 +1,158 @@
+@import "var";
+
+@include simple-reset;
+@include container;
+@include rows;
+@include text-align;
+@include spacing;
+/*over-flow*/
+.ov-h {
+  overflow: hidden;
+}
+.gw {
+  float: left;
+  width: $fw;
+}
+.bg-faded {
+  background-color: darken(white, 6%);
+}
+.bg-clip {
+  background-clip: content-box;
+}
+h3, h4, h5, h6 {
+  line-height: 1.6;
+}
+#page {
+  width: 100%;
+  min-height: 100vmin;
+  overflow: hidden;
+  display: $flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+.extend-wrap {
+  position: relative;
+  @extend .gw;
+  display: block;
+  @extend .ov-h;
+  & img {
+    display: $block;
+    max-width: $fw;
+    margin: 0;
+    pointer-events: none;
+  }
+  
+  .extend-cell {
+    position: relative;
+    float: left;
+    display: $block;
+    transition: .3s all ease .2s;
+    margin: 0;
+    @each $breakpoint, $min-max, $grids in $media {
+      @media screen and (#{$min-max}-width: #{$breakpoint}) {
+        width: #{$fw / $grids};
+        & .extend-content {
+          width: #{100% * $grids};
+        }//content
+        @for $i from 1 through $grids {
+          &:nth-of-type(#{$grids}n + #{$i}) .extend-content{
+            margin-left: -#{100% * ($i - 1)};
+          }
+          
+        }//for
+        @if($grids == 5) {
+          &:nth-of-type(#{$grids}n + #{$grids + 1}) {
+          clear: left;
+          }
+          } @else if($grids == 4) {
+             &:nth-of-type(#{$grids + 1 }n + #{$grids + 2}) { clear: none; }
+            &:nth-of-type(#{$grids}n + #{$grids + 1}) {clear: left;}
+          } @else if($grids == 3) {
+             &:nth-of-type(#{$grids + 2 }n + #{$grids + 3}) { clear: none; }
+             &:nth-of-type(#{$grids + 1 }n + #{$grids + 2}) { clear: none; }
+             &:nth-of-type(#{$grids}n + #{$grids + 1}) {clear: left;}
+          } @else if($grids == 2) {
+             &:nth-of-type(#{$grids + 3 }n + #{$grids + 4}) { clear: none; }
+             &:nth-of-type(#{$grids + 2 }n + #{$grids + 3}) { clear: none; }
+             &:nth-of-type(#{$grids + 1 }n + #{$grids + 2}) { clear: none; }
+             &:nth-of-type(#{$grids}n + #{$grids + 1}) {clear: left;}
+          } @else  {
+            &:nth-of-type(#{$grids + 4 }n + #{$grids + 5}) { clear: none; }
+             &:nth-of-type(#{$grids + 3 }n + #{$grids + 4}) { clear: none; }
+             &:nth-of-type(#{$grids + 2 }n + #{$grids + 3}) { clear: none; }
+             &:nth-of-type(#{$grids + 1 }n + #{$grids + 2}) { clear: none; }
+             &:nth-of-type(#{$grids}n + #{$grids + 1}) {clear: left;}
+          }
+      }//media
+    }//each
+    .arrow-top {
+      display: $block;
+      content: " ";
+      height: 20px;
+      clear: both;
+      margin: -10px auto 0 auto;
+    }
+    &.is-collapse {
+       .arrow-top {
+        border: 10px solid transparent;
+      }
+      & .extend-content {
+        height: 0;
+        overflow: hidden;
+      }
+    }
+    &.is-extended {
+      .arrow-top {
+        border: 10px solid transparent;
+        border-bottom-color: #f0f0f0;
+        width: 20px;
+      }
+      & .extend-content {
+        transform: translateY(-0px);
+        margin-bottom: 1rem;
+        height: auto;
+      }
+    }
+    .extend-thumbnail,
+    .extend-content {
+      display: $block;
+    }
+    & .extend-content {
+      position: relative;
+      float: left;
+      transform: translateY(-10px);
+      transition: height linear .4s 0s, margin-bottom .2s .1s, transform .2s .1s;
+    }
+
+    .extend-closed {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      display: block;
+      content: " ";
+      &::before,
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        content: " ";
+        display: block;
+        margin-top: -1px;
+        width: 80%;
+        height: 2px;
+        background-color: #666;
+        
+      }
+      &::before {
+        transform: rotate(45deg);
+      }
+      &::after {
+        transform: rotate(-45deg);
+      }
+    }//closed
+  }//cell
+}//extend-wrap
