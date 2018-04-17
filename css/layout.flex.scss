@@ -1,0 +1,167 @@
+@import "var";
+// @include simple-reset;
+// @include container;
+// @include rows;
+// @include text-align;
+// @include spacing;
+.ov-h {
+  overflow: hidden;
+}
+.gw {
+  float: left;
+  width: $fw;
+}
+.bg-faded {
+  background-color: darken(white, 6%);
+}
+.bg-clip {
+  background-clip: content-box;
+}
+.extend-wrap {
+  position: relative;
+  @extend .gw;
+  display: block;
+  @extend .ov-h;
+  transition: .6s all linear .5s;
+  & img {
+    display: $block;
+    max-width: $fw;
+    margin: 0;
+    pointer-events: none;
+  }
+  .arrow-top {
+    display: $block;
+    content: " ";
+    height: 15px;
+    clear: both;
+    margin: -0px auto 0 auto;
+    position: relative;
+  }
+  $media-flex: (
+  $xs min xs 1,
+  $sm min sm 2,
+  $md min md 3,
+  $lg min lg 4,
+   $xl min xl 5
+  );
+
+
+  .extend-cell {
+    @media screen and (min-width: $xl) {
+    &.col-xl-auto {
+      flex: 1 0 calc((100% / 12) * 2.4);
+      max-width: calc((100% / 12) * 2.4);
+        width: calc((100% / 12) * 2.4);
+     }
+    }
+
+    @each $breakpoint, $min-max, $class, $grids in $media-flex {
+      @media screen and (#{$min-max}-width: #{$breakpoint}) {
+
+        &[class*="col-#{$class}"] .extend-content {
+          width: #{100% * $grids};
+        }//content
+        @for $i from 1 through $grids {
+          &[class*="col-#{$class}"]:nth-of-type(#{$grids}n + #{$i}) .extend-content{
+            margin-left: -#{100% * ($i - 1)};
+          }
+
+        }//for
+
+      }//media
+    }//each
+
+    &.is-collapse {
+        margin-bottom: 3rem;
+       .arrow-top {
+        border: 7px solid transparent;
+      }
+      & .extend-content {
+
+        height: 0;
+        //transition: .1s margin-bottom 0s, .1s transform 0s, .3s height .6s, .6s overflow .5s;
+      }
+    }
+
+    &.is-extended {
+      padding-bottom: 1rem;
+      margin-bottom: 0;
+      .arrow-top {
+        border: 10px solid transparent;
+        border-bottom-color: #c1ced4;
+        width: 20px;
+      }
+      & .extend-content {
+        z-index: 1;
+        height: auto;
+        margin-bottom: 0!important;
+
+      }
+    }
+  }//cell
+  .extend-thumbnail,
+  .extend-content {
+    display: $block;
+  }
+  & .extend-thumbnail {
+    cursor: pointer;
+    pointer-events: painted;
+    & * {
+      pointer-events: none;
+    }
+  }
+  & .extend-content {
+    position: relative;
+    float: left;
+    display: block!important;
+    overflow: hidden;
+    height: 0;
+    transition: all ease .6s;
+    & > .gw {
+      background-color: #c1ced4;
+      padding: 60px 2rem 30px 2rem;
+      min-height: 55vmin;
+      & .row {
+        margin-top: 1.5rem;
+      }
+    }
+  }
+.extend-thumbnail > * {
+  padding-left: 7px;
+  padding-right: 7px;
+
+}
+  .extend-closed {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    display: block;
+    content: " ";
+    cursor: pointer;
+    &::before,
+    &::after {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      content: " ";
+      display: block;
+      margin-top: -1px;
+      width: 80%;
+      height: 2px;
+      background-color: #555;
+
+    }
+    &::before {
+      transform: rotate(45deg);
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }//closed
+
+
+
+
+}//extend-wrap
